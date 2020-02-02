@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notejam
+spec:
+  selector:
+    matchLabels:
+      app: notejam
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: notejam
+    spec:
+      volumes:
+        - name: nfs
+          persistentVolumeClaim:
+            claimName: nfs
+      containers:
+      - name: notejam
+        image: enzomatrix/notejamcustom:latest
+        ports:
+          - containerPort: 5000
+            hostPort: 5000
+            name: "nodejam-port"
+        volumeMounts:
+          - mountPath: "/data"
+            name: nfs
